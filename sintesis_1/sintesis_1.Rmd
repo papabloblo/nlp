@@ -1,0 +1,6 @@
+---
+title: "Síntesis 1"
+output: html_notebook
+---
+
+# Introducción
