@@ -1,7 +1,7 @@
 ---
 title: "Síntesis 1"
 output: html_notebook
-bibliography: library.bib
+bibliography: /Users/pablohidalgo/Documents/library.bib
 ---
 
 # Introducción
@@ -15,7 +15,23 @@ En la teoría de autómatas, una máquina de estados finitos se considera un aut
 
 Estrictamente, un autómata determinista se puede considerar como un tipo de autómata no determinista
 
-[@Rabin1959]
+En [@Rabin1959] se definen los **autómatas deterministas** como aquellos que están determinados unívocamente por la tabla de movimientos ya que hay **una y solo una** forma de que la máquina cambie su estado en una situación particular. Por contra, en el mismo texto se definen los **autómatas no deterministas** como los que 
+
+# 7. Describir la relación que existe entre los conceptos **corpus de entrenamiento** (*training set*), **corpus de test** (*test set*), **vocabulario abierto**, **vocabulario cerrado** y **perplejidad**.
+
+Cualquier área del conocimiento que involucre el desarrollo de modelos matemáticos para conocer la realidad, se necesita entrenar sobre unos datos empíricos. En el área de la Inteligencia Artificial o del Machine Learning, hay varias estrategias para construir los modelos matemáticos a partir de unos datos. Una de ellas es dividir la muestra original en dos conjuntos: el conjunto de entrenamiento y el conjunto de test. En el procesamiento del lenguaje natural no es una excepción. Determinar la construcción del modelo, por ejemplo, un modelo de N-gramas, 
+
+El **corpus de entrenamiento** es aquella subconjunto del corpus sobre el que se entrena el modelo, es decir, a partir de él se calculan los parámetros que rigen el modelo que en el contexto de los modelos de N-gramas pueden ser el N más adecuado, la mejor forma de *smoothing*, etcétera. No obstante, también necesitamos conocer cómo se corportará ese modelo en un entorno real. Es el papel que desempeña el **corpus de test**, otro subconjunto del corpus original distinto del corpus de entrenamiento. Si solo nos restringiésemos al corpus de entrenamiento tendríamos una información sesgada de cómo se desenvolvería en la realidad. Además, podríamos correr el riesgo de caer en el sobreajuste, es decir, tener un modelo excesivamente particularizado para el corpus de entrenamiento pero que, no generaliza bien fuera de él. 
+
+De la mano de estos dos conceptos, tenemos el vocabulario abierto y el vocabulario cerrado. La hipótesis de vocabulario cerrado asume que **hay un léxico cerrado** y que todas las palabras que aparecen en el corpus de test están recogidas en este léxico.
+Sin embargo, dada la riqueza del lenguaje, es ingenuo pensar que todas las palabras que puedan aparecer en el corpus de test están recogidas en ese léxico cerrado. Por lo tanto, necesitamos también el concepto de **vocabulario abierto** y en el que se trata de modelar las palabras desconocidas en el corpus de test.
+
+Además del corpus de test, es necesario **definir alguna métrica** para conocer cómo de bien generaliza un modelo entrenado en el corpus de entrenamiento cuando se enfrenta al corpus de test. Una métrica es la **perplejidad**. 
+
+
+
+# 8. ¿Qué ocurre si tenemos un corpus de entrenamiento grande y un corpus de test pequeño y viceversa?
+
 
 # 9. Describir qué problema se pretende resolver mediante las técnicas de *smooothing*.
 
