@@ -1,6 +1,26 @@
 ---
 title: "Síntesis 1"
 output: html_notebook
+bibliography: library.bib
 ---
 
 # Introducción
+
+# 2. Decribir la relación entre autómatas deterministas y no deterministas. El concepto de estrategia de búsqueda.
+
+En la teoría de autómatas, una máquina de estados finitos se considera un autómata finito determinista si:
+
+- cada una de sus transiciones está determinada unívocamente por su estado de entrada y su símbolo de entrada
+- 
+
+Estrictamente, un autómata determinista se puede considerar como un tipo de autómata no determinista
+
+[@Rabin1959]
+
+# 9. Describir qué problema se pretende resolver mediante las técnicas de *smooothing*.
+
+Para cualquier modelo basado en **N-gramas** se necesitará una estimación de la máxima verosimilitud (EMV) obtenida del conjunto de entrenamiento. Estas estimaciones podrán ser precisas para un *N-grama* en el caso de que tenga un número suficiente de casos en el conjunto de entrenamiento. Sin embargo, el conjunto de datos en el que nos basamos para estimar estas probabilidades **es finito** y por tanto puede que secuencias de palabras perfectamente válidas no tengan ninguna ocurrencia lo que nos llevaría a tener **N-gramas con probabilidad 0** pero que no deberían. Además, nos enfrentamos al problema de que no solo podemos tener *N-gramas* con ninguna ocurrencia, sino que la estimación de máxima verosimilitud también será imprecisa en el caso en el que haya pocas ocurrencias de un determinado *N-grama*.
+
+Por ejemplo, supongamos que nuestro corpus se compone de textos extraídos de libros de filosofía. N-gramas como *"teoría de la justicia"* o *"la libertad de pensamiento"* serán relativamente comunes y, por tanto, tendremos disponibles suficientes casos como para poder calcular la estimación de máxima verosimilitud. Sin embargo, seguramente no encontraremos ningún N-grama como *"el Real Madrid perdió"* y, por tanto, su estimación por máxima verosimilitud será 0. ¿Quiere decir esto que no podamos encontrar ese **4-grama**? Desde luego que no. Ese es precisamente el problema que se intenta subsanar, tratar de modificar la EMV centrándonos en aquellos *N-gramas* que hemos asumido incorrectamente que tendrían probabilidad 0. 
+
+# Bibliografía
