@@ -27,6 +27,7 @@ De la mano de estos dos conceptos, tenemos el vocabulario abierto y el vocabular
 Sin embargo, dada la riqueza del lenguaje, es ingenuo pensar que todas las palabras que puedan aparecer en el corpus de test están recogidas en ese léxico cerrado. Por lo tanto, necesitamos también el concepto de **vocabulario abierto** y en el que se trata de modelar las palabras desconocidas en el corpus de test.
 
 Además del corpus de test, es necesario **definir alguna métrica** para conocer cómo de bien generaliza un modelo entrenado en el corpus de entrenamiento cuando se enfrenta al corpus de test. Una métrica es la **perplejidad**. 
+La intuición de la métrica de perplejidad, según el libro base, se puede entender como *dados dos modelos probabilísticos, el mejor modelo será aquél que con un mejor ajuste al corpus de test o que mejor prediga los detalles del corpus de test*.
 
 
 
