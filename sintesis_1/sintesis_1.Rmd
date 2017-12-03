@@ -17,6 +17,21 @@ Estrictamente, un autómata determinista se puede considerar como un tipo de aut
 
 En [@Rabin1959] se definen los **autómatas deterministas** como aquellos que están determinados unívocamente por la tabla de movimientos ya que hay **una y solo una** forma de que la máquina cambie su estado en una situación particular. Por contra, en el mismo texto se definen los **autómatas no deterministas** como los que 
 
+# 4. Describir qué es un transductor secuencial. ¿Qué es la morfología de dos niveles?
+
+Un **transductor de estados finitos** se puede ver cono un tipo de autómata finito que hace asociaciones entre dos conjuntos de símbolos. En particular, los **transductores secuenciales** son un tipo de transductores los cuales son determinísticos en su entrada. Cabe recalcar que los transdcutores secuenciales lo son en su entrada (*input*) pero no tienen porqué serlo en su salida (*output*).
+
+**Relacionar transductor con morfología de dos niveles**
+
+Una tarea imporante en el procesamiento del lenguaje natural es el **análisis morfológico** (*morphological parsing*, en inglés) o **morfología**. Según la Real Academia de la Lengua Española, la **morfología** es la parte de la gramática que **estudia la estructura de las palabras y de sus elementos constitutivos**. En el caso de la **morfología de dos niveles**, una palabra se representa como una correspondencia entre dos niveles: 
+
+- **nivel léxico**: que representa la concatenación de los morfemas que componen una palabra.
+- **nivel de superficie**: que representa la concatenación de las letras que componen la ortografía de una palabra.
+
+El nivel de superficie podría verse como un nivel explícito, que viene dado por las letras que componen una palabra y el segundo nivel, el nivel léxico, es un nivel implícito y más abstracto.
+
+
+
 # 7. Describir la relación que existe entre los conceptos **corpus de entrenamiento** (*training set*), **corpus de test** (*test set*), **vocabulario abierto**, **vocabulario cerrado** y **perplejidad**.
 
 Cualquier área del conocimiento que involucre el desarrollo de modelos matemáticos para conocer la realidad, se necesita entrenar sobre unos datos empíricos. En el área de la Inteligencia Artificial o del Machine Learning, hay varias estrategias para construir los modelos matemáticos a partir de unos datos. Una de ellas es dividir la muestra original en dos conjuntos: el conjunto de entrenamiento y el conjunto de test. En el procesamiento del lenguaje natural no es una excepción. Determinar la construcción del modelo, por ejemplo, un modelo de N-gramas, 
