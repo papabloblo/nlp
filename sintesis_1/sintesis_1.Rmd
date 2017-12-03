@@ -28,7 +28,7 @@ Una tarea imporante en el procesamiento del lenguaje natural es el **análisis m
 - **nivel léxico**: que representa la concatenación de los morfemas que componen una palabra.
 - **nivel de superficie**: que representa la concatenación de las letras que componen la ortografía de una palabra.
 
-El nivel de superficie podría verse como un nivel explícito, que viene dado por las letras que componen una palabra y el segundo nivel, el nivel léxico, es un nivel implícito y más abstracto.
+El nivel de superficie podría verse como un nivel explícito, que viene dado por las letras que componen una palabra y el segundo nivel, el nivel léxico, es un nivel implícito y más abstracto. 
 
 
 
@@ -54,5 +54,27 @@ La intuición de la métrica de perplejidad, según el libro base, se puede ente
 Para cualquier modelo basado en **N-gramas** se necesitará una estimación de la máxima verosimilitud (EMV) obtenida del conjunto de entrenamiento. Estas estimaciones podrán ser precisas para un *N-grama* en el caso de que tenga un número suficiente de casos en el conjunto de entrenamiento. Sin embargo, el conjunto de datos en el que nos basamos para estimar estas probabilidades **es finito** y por tanto puede que secuencias de palabras perfectamente válidas no tengan ninguna ocurrencia lo que nos llevaría a tener **N-gramas con probabilidad 0** pero que no deberían. Además, nos enfrentamos al problema de que no solo podemos tener *N-gramas* con ninguna ocurrencia, sino que la estimación de máxima verosimilitud también será imprecisa en el caso en el que haya pocas ocurrencias de un determinado *N-grama*.
 
 Por ejemplo, supongamos que nuestro corpus se compone de textos extraídos de libros de filosofía. N-gramas como *"teoría de la justicia"* o *"la libertad de pensamiento"* serán relativamente comunes y, por tanto, tendremos disponibles suficientes casos como para poder calcular la estimación de máxima verosimilitud. Sin embargo, seguramente no encontraremos ningún N-grama como *"el Real Madrid perdió"* y, por tanto, su estimación por máxima verosimilitud será 0. ¿Quiere decir esto que no podamos encontrar ese **4-grama**? Desde luego que no. Ese es precisamente el problema que se intenta subsanar, tratar de modificar la EMV centrándonos en aquellos *N-gramas* que hemos asumido incorrectamente que tendrían probabilidad 0. 
+
+
+# 1. Describir el problema de la ambigüedad gramatical (*part-of-speech*)
+
+Otra de las tareas fundamentales del procesamiento del lenguaje natural es la de conocer el papel que desempeñan cada una de las palabras que aparacen en una oración. Uno de los problemas a los que esta tarea puede enfrentarse es la ambigüedad gramatical, es decir, palabras con la misma grafía pueden desempeñar funciones distintas en una oración que dependerá de factores como las palabras que lo precedan e, incluso, el contexto en el que aparezca. 
+
+La ambigüedad gramatical puede ser de distintos tipos según **cita**: 
+
+- **ambigüedad estructural**: Se da en una oración o frase cuando tiene dos o más significados posibles, debido a la estructura, ya sea por el agrupamiento o la distinta función gramatical.
+
+- **ambigüedad estructural**:
+
+- **semántica**:
+
+Una forma de ambigüedad gramatical es la ambigüedad gramatical en la que una misma palabra puede pertenecer a diversas categorías gramaticales. Un ejemplo clásico es la ambigüedad con la palabra *haya*, como puede verse en estas frases:
+
+- He plantado un **haya** en mi jardín.
+- Ojalá **haya** una solución al conflicto.
+
+En la primera de ellas, la palabra *haya* se refiere al árbol y, por tanto, su categoría gramatical es la de **nombre**; en la segunda, *haya* se refiere a la tercera persona del singular del verbo haber. 
+
+
 
 # Bibliografía
