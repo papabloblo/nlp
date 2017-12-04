@@ -75,6 +75,33 @@ Una forma de ambigüedad gramatical es la ambigüedad gramatical en la que una m
 
 En la primera de ellas, la palabra *haya* se refiere al árbol y, por tanto, su categoría gramatical es la de **nombre**; en la segunda, *haya* se refiere a la tercera persona del singular del verbo haber. 
 
+3. Complejidad computacional de ambigüedad gramatical. ¿Cómo lo resuelven los HMM?
+
+Ya hemos visto que calcular 
+
+$$
+\hat{t}_1^n = \arg\max_{t_1^n}P(w_1^n|t_1^n)P(t_1^n)
+$$
+es **costo computacionalmente**. Con la idea de facilitar los cálculos, surgen los Modelo ocultos de Markov (HMM, por sus siglas en inglés) que asumen:
+
+1. La probabilidad de que aparezca una palabra depende solo de su función en la oración (*part-of-speech tag*). Esto se traduce, formalmente en
+
+$$
+P(w_1^n|t_1^n) \approx P(w_i|t_i)
+$$
+2. La probabilidad de que una etiqueta aparezca depende solo de la etiqueta anterior y no de la secuencia completa, es decir,
+$$
+P(t_1^n) \approx P(t_i|t_{i-1})
+$$
+
+Por lo tanto, la ecuación **bla** se convierte en 
+
+$$
+\hat{t}_1^n = \arg\max_{t_1^n}P(w_1^n|t_1^n)P(t_1^n)\approx P(w_i|t_i) P(t_i|t_{i-1})
+$$
+
+Con un diagrama puede entenderse mejor en qué consisten los HMM:
+
 
 
 # Bibliografía
