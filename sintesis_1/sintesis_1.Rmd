@@ -75,6 +75,14 @@ Una forma de ambigüedad gramatical es la ambigüedad gramatical en la que una m
 
 En la primera de ellas, la palabra *haya* se refiere al árbol y, por tanto, su categoría gramatical es la de **nombre**; en la segunda, *haya* se refiere a la tercera persona del singular del verbo haber. 
 
+# 2. ¿Qué información emplea el etiquedator gramatical EngCG ENGTWOL?
+
+El etiquetador gramatical **EngCG ENGTWOL** cae dentro de aquellos **etiquetadores gramaticales basados en reglas**. Los dos componentes de este etiquetador son los **diccionarios** y los **conjuntos de reglas**.
+
+El EngCG ENGTWOL tiene un diccionario con más de 56.000 entradas en el que se recoge la función gramatical que puede desempeñar dada la raíz (*stem*) de una palabra en inglés. En el caso de que una misma raíz pueda puede desempeñar varias funciones gramaticales, existirá una entrada separada en el diccionario para cada una de ellas. En el diccionario no aparecen formas derivadas o ¿*inflected*?. En cada una de las entradas se tiene un conjunto de características morfológicas y sintácticas.
+
+Por otro lado, también tiene un conjunto de reglas que son utilizadas para subsanar la posible ambigüedad gramatical. Estas reglas son utilizadas en negativo, es decir, cada una de ellas lleva asociada una serie de condiciones que según se satisfagan o no, supondrán la eliminación de una de las posibles ambigüedades. El conjunto de reglas está constituido por 3.744 en el sistema EngCG-2
+
 # 3. Complejidad computacional de ambigüedad gramatical. ¿Cómo lo resuelven los HMM?
 
 Ya hemos visto que calcular 
