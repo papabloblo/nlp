@@ -1,6 +1,11 @@
 ---
 title: "Síntesis 1"
-output: html_notebook
+output:
+  pdf_document:
+    toc: yes
+  html_notebook:
+    number_sections: yes
+    toc: yes
 bibliography: /Users/pablohidalgo/Documents/library.bib
 ---
 
@@ -55,6 +60,94 @@ Para cualquier modelo basado en **N-gramas** se necesitará una estimación de l
 
 Por ejemplo, supongamos que nuestro corpus se compone de textos extraídos de libros de filosofía. N-gramas como *"teoría de la justicia"* o *"la libertad de pensamiento"* serán relativamente comunes y, por tanto, tendremos disponibles suficientes casos como para poder calcular la estimación de máxima verosimilitud. Sin embargo, seguramente no encontraremos ningún N-grama como *"el Real Madrid perdió"* y, por tanto, su estimación por máxima verosimilitud será 0. ¿Quiere decir esto que no podamos encontrar ese **4-grama**? Desde luego que no. Ese es precisamente el problema que se intenta subsanar, tratar de modificar la EMV centrándonos en aquellos *N-gramas* que hemos asumido incorrectamente que tendrían probabilidad 0. 
 
+# Etiquetado
+
+Una de las tareas del procesamiento del lenguaje natural es la de saber a qué **categoría gramatical** pertenece cada una de las palabras que están presentes en una frase o texto (*Part-of-Speech Tagging* en inglés). Esta tarea nos ayudará a desarrollar con éxito otras como la del reconocimiento del habla. 
+
+No se trata de una tarea sencilla ya que la riqueza del lenguaje hace que haya que enfrentarse a palabras con la misma grafía pero que pueden pertenecer a categorías gramaticales distintas en una oración lo que se conoce como **ambigüedad gramatical**.
+
+En caso de ambigüedad, la categoría gramatical puede depender de factores como las palabras precedentes o el contexto en el que se desarrolla la oración. La palabra **haya** es un ejemplo de ambigüedad gramatical:
+
+- He plantado un **haya** en mi jardín.
+- Ojalá **haya** una solución al conflicto.
+
+En el primer ejemplo, la palabra *haya* se refiere al árbol y, por tanto, su categoría gramatical es la de **nombre**; en la segunda, *haya* se refiere a la tercera persona del singular del verbo haber. En castellano, una primera categorización gramatical aparece en la Gramática Castellana de Antonio de Nebrija en 1492 (falta cita). Posteriormente, los lingüistas han enriquecido esta gramática con una recategorización.
+
+En el contexto del procesamiento del lenguaje natural, como rama de la Inteligencia  Artificial, se han desarrollado distintos algoritmos que permitan realizar el etiquetado gramatical de forma automática, sin la intervención humana ya que el objetivo es la de poder etiquetar corpus de gran tamaño y que resultaría una tarea inabarcable para un humano.
+
+Se pueden distinguir tres grandes enfoques para el etiquetado gramatical: los etiquetadores **basados en reglas**, los **estocásticos** y aquellos que combinan los dos anteriores.
+
+## Etiquetadores basados en reglas. EngCG ENGTWOL.
+
+Los etiquetadores basados en reglas tratan de conocer la categoría gramatical aplicando estructuras lógicas preconcebidas. 
+
+El etiquetador EngCG ENGTWOL es uno de estos etiquetadores basados en reglas. La información que nutre a este etiquetador gramatical son los **diccionarios** y los **conjuntos de reglas**.
+
+El etiquetador EngCG ENGTWOL contiene un **diccionario con más de 56.000 entradas** en el que se recoge la función gramatical que puede desempeñar dada la raíz o morfema (*stem*) de una palabra en inglés. En el caso de que una misma raíz pueda puede desempeñar varias funciones gramaticales, existirá una entrada separada en el diccionario para cada una de ellas con un conjunto de caractarerísticas tanto morfológicas como sintácticas. En el diccionario no aparecen formas derivadas o ¿*inflected*?.
+
+Por otro lado, también tiene un **conjunto de reglas** que son utilizadas para subsanar la posible ambigüedad gramatical. Estas reglas son utilizadas en negativo, es decir, cada una de ellas lleva asociada una serie de condiciones que según se satisfagan o no, supondrán la eliminación de una de las posibles ambigüedades. El conjunto de reglas está constituido por 3.744 en el sistema EngCG-2. **¡COMPLETAR!**
+
+## Etiquetadores estocásticos. HMM.
+
+Los etiquetadores basados en reglas tienen el inconveniente de que las reglas han de ser determinadas por un grupo de expertos. El enfoque de los etiquetadores estocásticos es el de hacer que un algoritmo sea capaz de determinar el etiquetado aprendiendo de un corpus ya etiquetado e inferir las etiquetas para corpus de test. Tiene también la contrapartida de necesitar un corpus etiquetado con el esfuerzo que ello pede suponer. 
+
+Desde el punto de vista estocástico, los etiquetadores tratan de encontrar aquella sucesión de etiquetas gramaticales $t_1^n = (t_1, \ldots, t_n)$ que se considere la más probable para una secuencia de palabras dada, es decir, estamos tratando de resolver el problema
+
+$$
+\hat{t}_1^n = \underset{t_1^n}{\arg\max}\, P(t_1^n|w_1^n)
+$$
+
+Aplicando el teorema de Bayes, llegamos a 
+
+$$
+\hat{t}_1^n = \arg\max_{t_1^n}P(w_1^n|t_1^n)P(t_1^n)
+$$
+
+Los modelos ocultos de Markov (*HMM* por sus siglas en inglés) pertenecen a la categoría de los etiquetadores estocásticos.
+
+Ya hemos visto que calcular 
+
+
+es **costoso computacionalmente**. Los modelos matemáticos intentan describir la realidad a través de ciertas hipótesis que permitan hacer una simplificación de la realidad y hacer posible los cálculos computacionales. Para el caso del etiquetado gramatical, tenemos los Modelos ocultos de Markov (HMM, por sus siglas en inglés) que simplifican la realidad asumiendo que:
+
+1. La probabilidad de que aparezca una palabra depende solo de su función en la oración (*part-of-speech tag*), es decir,
+
+$$
+P(w_1^n|t_1^n) \approx P(w_i|t_i)
+$$
+
+2. La probabilidad de que una etiqueta aparezca depende solo de la etiqueta anterior y no de la secuencia completa, es decir,
+$$
+P(t_1^n) \approx P(t_i|t_{i-1})
+$$
+
+Por lo tanto, el problema a resolver se convierte en 
+
+$$
+\hat{t}_1^n = \underset{t_1^n}{\arg\max} \, P(w_1^n|t_1^n)P(t_1^n)\approx \underset{t_1^n}{\arg\max} \,P(w_i|t_i) P(t_i|t_{i-1})
+$$
+
+Que es más manejable computacionalmente. Uno de los algoritmos más comunes para calcular la secuencia de etiquetas $t_1^n$ más probables es el **Algoritmo de Viterbi**.
+
+## Etiquetadores híbridos. Aproximación de Brill.
+
+Existen algoritmos híbridos que heredan las ideas tanto de los etiquetadores estocásticos como de los de basados en reglas. Conjugan un conjunto de reglas formales estructuradas con el perfeccionamiento de estas reglas mediante el entrenamiento en un corpus de entrenamiento.
+
+En primer lugar, el algoritmo etiqueta cada palabra con su categoría más probable, es decir, $\hat{t}_i = \underset{t_i}{argmax}P(t_i|w_i)$. Después, aplica el conjunto de reglas aprendidas para modificar algunas de las etiquetas.
+
+El algoritmo supone un catálogo con las distinas estructuras de reglas que pueden existir:
+
+- *Cambia la etiqueta **a** a la etiqueta **b** cuando:*
+  - la palabra anterior (siguiente) está etiquetada como **z**.
+  - dos palabras anterior (siguientes) están etiquedatas como **z**.
+  - una de las dos palabras anteriores (siguientes) están etiquetadas como **z**.
+  - Una de las tres palabras anteriores (siguientes) están etiquetads como **z**.
+  - la palabra anterior está etiquetada como **z** y la palabra siguiente está etiquetada como **w**.
+  - la palabra anterior (siguiente) está etiquedad como **z** y la dos palabras anteriores (siguientes) está etiquetadas como **w**.
+  
+Cada una de las variables **a**, **b**, **z** y **w** se refieren a las distintas funciones gramaticales.
+
+Estas reglas se apoyan en los modelos estocásticos para terminar de completarse y se nutren de un corpus de entrenamiento ya etiquetado para aprender cómo se han de construir, lo que suele denominarse **modelo supervisado** en el campo del **Aprendizaje Automático**.
 
 # 1. Describir el problema de la ambigüedad gramatical (*part-of-speech*)
 
