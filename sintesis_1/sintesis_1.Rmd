@@ -1,26 +1,57 @@
 ---
 title: "Síntesis 1"
 output:
-  pdf_document:
-    toc: yes
   html_notebook:
     number_sections: yes
+    toc: yes
+  pdf_document:
     toc: yes
 bibliography: /Users/pablohidalgo/Documents/library.bib
 ---
 
 # Introducción
 
+# 1. Describir la relación existente entre las expresiones regulares y los autómatas finitos. A modo de ejemplo, ilustrarlo con alguna de la relacionadas con la práctica y su autómata correspondiente.
+
+El procesamiento del lenguaje natural aspira a hacer 
+
+En el procesamiento del lenguaje natural trabajamos con palabaras o, lo que es lo mismo, con **cadenas de caracteres**. 
+
+Una **expresión regular** es una notación algebraica que permite caracterizar un conjunto de cadenas de caracteres. Dicho de otro modo, mediante una concatenación de símbolos, seremos capaces de encontrar cadenas de caracteres que sigan un patrón o estructura determinada. Podría denominarse como un *metalenguaje*. 
+
+Pero estas notaciones algebraicas no tienen ninguna utilidad en sí mismas, necesitamos que un ordenador sea capaz de entenderlas para llevarlas a la práctica. Es aquí donde entran en juego los **autómatas finitos**, que pueden verse como una implementación de las expresiones regulares. De hecho, cualquier expresión regular puede ser implementada como un autómata finito y viceversa, cualquier autómata finito puede ser descrito con una expresión regular.
+
+**EJEMPLO DE LA PRÁCTICA**.
+
 # 2. Decribir la relación entre autómatas deterministas y no deterministas. El concepto de estrategia de búsqueda.
+
+Podemos distinguir dos tipos de autómatas finitos: determinísticos y no determinísticos. Recordemos que se pueden representar los autómatas finitos con la tabla movimientos o de estado-transición. En esta tabla se recogen el estado inicial, los estados aceptados y qué transiciones se permiten entre estados en función de los símbolos. 
+
+En [@Rabin1959] se definen los **autómatas deterministas** como aquellos que están determinados unívocamente por la tabla de estado-transición ya que hay **una y solo una** forma de que el autómata cambie su estado en una situación particular. Por contra, en el mismo texto se definen los **autómatas no deterministas** como aquellos que tienen estados cuyos movimientos no están unívocamente determinados, es decir, llegado a un estado el símbolo para ir al siguiente estado no determina estrictamente el siguiente estado. 
+
+Estrictamente, un autómata determinista se puede considerar como un tipo de autómata no determinista. 
+
+En un primer acercamiento podría parecer que los autómatas no deterministas son más potentes que los deterministas. Sin embargo, en [@Rabin1959] se prueba que **cualquier autómata no determinista se puede convertir en uno determinista**. Este resultado es interesante ya que podemos construir un autómata no determinista de forma fácil y que se convierta en uno determinista que tiene la ventaja de ser más eficiente computacionalmente. No obstante, en la práctica esta construcción puede ser inviable ya que el autómata determinista equivalente a uno no determinista con $N$ estados puede llegar a tener $2^N$ estados.
+
+Como hemos visto, los autómatas no deterministas tienen puntos de elección en los que existen varias posibilidades a seguir. Los algoritmos de reconocimiento para autómatas no deterministas deberán elegir una **estrategia de búsqueda** para tratar estos puntos de elección. Fundamentalmente hay dos estrategias: 
+
+- **primero en profundidad o LIFO** (*last in first out*, último en entrar, primero en salir): dado un punto de elección, se enumeran todos los siguientes movimientos posibles, se escoge el último que se ha recogido, y se sigue hasta que se obtiene la aceptación rechazo de la cadena de caracteres. Si se rechaza, se sigue con el sigueinte estado posible que no haya sido considerado. 
+
+- **primero en anchura o FIFO** (*first in first out*, primero en entrar, primero en salir): en vez de escoger un camino como en la estrategia LIFO, se examinan todas las posibles elecciones pero aumentando progresivamente un paso cada una de las elecciones.
+
+**¿DIBUJO?**
+
+Para problemas complejos, se pueden utilizar otras estrategias de búsqueda como la **programación dinámica** o **A\***.
+
 
 En la teoría de autómatas, una máquina de estados finitos se considera un autómata finito determinista si:
 
 - cada una de sus transiciones está determinada unívocamente por su estado de entrada y su símbolo de entrada
 - 
 
-Estrictamente, un autómata determinista se puede considerar como un tipo de autómata no determinista
 
-En [@Rabin1959] se definen los **autómatas deterministas** como aquellos que están determinados unívocamente por la tabla de movimientos ya que hay **una y solo una** forma de que la máquina cambie su estado en una situación particular. Por contra, en el mismo texto se definen los **autómatas no deterministas** como los que 
+
+
 
 # 4. Describir qué es un transductor secuencial. ¿Qué es la morfología de dos niveles?
 
