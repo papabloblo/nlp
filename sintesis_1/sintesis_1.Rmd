@@ -9,7 +9,134 @@ output:
 bibliography: /Users/pablohidalgo/Documents/library.bib
 ---
 
-# Introducción
+# Tema 2: autómatas finitos, procesamiento de unidades morfológico-léxicas, ngramas.
+
+El **procesamiento del lenguaje natural (PLN)** es una rama de la **inteligencia artificial** cuyo objetivo es que los ordenadores sean capaces de llevar acabo tareas que involucren al lenguaje humano.
+
+Las unidades con las que trabaja el PLN son las **cadenas de caracteres** ya sean textos, frases o palabras por lo que es necesario desarrollar sistemas a través de los cuales un ordenador sea capaz de manejarlas.
+
+Una **expresión regular** es una notación algebraica que permite caracterizar un conjunto de cadenas de caracteres. Dicho de otro modo, mediante una concatenación de símbolos, seremos capaces de encontrar cadenas de caracteres que sigan un patrón o estructura determinada. Podría denominarse como un *metalenguaje*. 
+
+Por ejemplo, imaginemos un corpus en el que se tengan las definiciones recogidas en un diccionario de diversos instrumentos musicales (como el corpus disponible para la práctica). Si quisiésemos reconocer aquellas frases en las que aparezca la palabra caja (*caja de resonancia*, por ejemplo) podríamos buscar donde apareciese **exactamente** la cadena de caracteres *caja*. Pero seguramente también querríamos recoger frases donde apareciese el plural **cajas**. Si hacemos uso de la expresiones regulares, podríamos expresar la condición como `/cajas?/` para buscar dónde aparece tanto *caja* como su plural *cajas*. El símbolo `?` indica que el caracter previo, en este caso `s` exactamente una o ninguna vez. Se dice que es un metalenguaje porque tiene sus propios símbolos para crear un lenguaje propio.
+
+Pero estas notaciones algebraicas no tienen ninguna utilidad en sí mismas, necesitamos que un ordenador sea capaz de entenderlas para llevarlas a la práctica. Es aquí donde entran en juego los **autómatas finitos**, que pueden verse como una implementación de las expresiones regulares. De hecho, cualquier expresión regular puede ser implementada como un autómata finito y viceversa, cualquier autómata finito puede ser descrito con una expresión regular. Los autómatas pueden representarse mediante un grafo dirigido con un conjunto finito de **vértices** o **nodos** que están unidos mediante enlaces denomindos **arcos** o **aristas**. Formalmente, un autómata está definido por los siguientes elementos:
+
+- **estados**: conjunto finito $Q = \{q_0, q_1, \ldots, q_n\}$.
+- **alfabeto de entrada**: conjunto finito de símbolos $\Sigma$.
+- **estado inicial**: $q_0$.
+- **estados finales**: conjunto $F \subseteq Q$
+- **función de transición**: o matriz de transicón entre estados, es decir, dado un estado $q \in Q$ y un símbolo de entrada $i\in\Sigma$, la función de transición $\delta(q, i)$ devuelve un nuevo estado $q'\in Q$. 
+
+
+|  | Input  | |||||
+|------|--:|---|------|---------|---------|---------|
+| **Estado** | **c** | **a** | **j** | **a**|**s**| $\emptyset$|
+| $\emptyset$          | 1 | $\emptyset$ | $\emptyset$ |$\emptyset$|$\emptyset$| $\emptyset$|
+| 1          | $\emptyset$ | 2 | $\emptyset$ |$\emptyset$|$\emptyset$|$\emptyset$|
+| 2          | $\emptyset$ | $\emptyset$ | 3 |$\emptyset$|$\emptyset$|$\emptyset$|
+| 3          | $\emptyset$ | $\emptyset$ | $\emptyset$ |4|$\emptyset$|$\emptyset$|
+| 4          | $\emptyset$ | $\emptyset$ | $\emptyset$ |$\emptyset$|5|5|
+| 5          | $\emptyset$ | $\emptyset$ | $\emptyset$ |$\emptyset$|$\emptyset$|$\emptyset$|
+
+
+
+Podemos distinguir dos tipos de autómatas finitos: **deterministas** y **no deterministas**. Recordemos que se pueden representar los autómatas finitos con la tabla movimientos o de estado-transición. En esta tabla se recogen el estado inicial, los estados aceptados y qué transiciones se permiten entre estados en función de los símbolos tal como se hizo en el ejemplo anterior.
+
+En [@Rabin1959] se definen los **autómatas deterministas** como aquellos que están determinados unívocamente por la tabla de estado-transición ya que hay **una y solo una** forma de que el autómata cambie su estado en una situación particular. Por contra, se definen los **autómatas no deterministas** como aquellos que tienen estados cuyos movimientos no están unívocamente determinados, es decir, llegado a un estado el símbolo para ir al siguiente estado no determina estrictamente el siguiente estado. 
+
+Los algoritmos de reconocimiento para autómatas no deterministas deberán elegir una **estrategia de búsqueda** para tratar estos puntos de elección. Fundamentalmente hay dos estrategias: 
+
+- **primero en profundidad o LIFO** (*last in first out*, último en entrar, primero en salir): dado un punto de elección, se enumeran todos los siguientes movimientos posibles, se escoge el último que se ha recogido, y se sigue hasta que se obtiene la aceptación rechazo de la cadena de caracteres, es decir, escogido un camino se **profundiza** en él hasta que se acepta o rechaza la cadena de caracteres en cuestión. Si se rechaza, se sigue con el siguiente estado posible que no haya sido considerado y se procede de la misma forma. 
+
+- **primero en anchura o FIFO** (*first in first out*, primero en entrar, primero en salir): en vez de escoger un camino como en la estrategia LIFO y llegar hasta el final de ese camino, se examinan todas las posibles elecciones pero aumentando progresivamente un paso cada una de las elecciones.
+
+Para problemas complejos, se pueden utilizar otras estrategias de búsqueda como la **programación dinámica** o **A\***.
+
+En [@Rabin1959] se prueba que **cualquier autómata no determinista se puede convertir en uno determinista**. Este resultado podría sugerir que no es necesario buscar estrategias de búsqueda como las que acabamos de describir ya que sería suficiente convertir un autómata no determinista en su análogo determinista. No obstante, en la práctica esta construcción puede ser inviable ya que el autómata determinista equivalente a uno no determinista con $N$ estados puede llegar a tener $2^N$ estados.
+
+
+
+En la tarea del procesamiento del lenguaje natural de manejar lenguaje humano, una cuestión útil es la del  **análisis morfológico** (*morphological parsing*, en inglés) o **morfología**. Según la **Real Academia de la lengua Española (RAE)**, la **morfología** es la parte de la gramática que **estudia la estructura de las palabras y de sus elementos constitutivos**. Las **palabras** son unidades de la lengua dotadas de significado y están constituidas por una o varias unidades menores, también con significado, llamadas morfemas.
+
+En clastellano existen dos tipos distintos de morfemas: los **morfemas léxicos o lexemas** y los **morfemas** que se añaden a ese lexema. En inglés se denominan *stems* y *affixes*, respectivamente.
+
+El **morfema léxico o lexema** es el morfema que aporta significado básico a la palabara. Por ejemplo: en *carpintero*, la raíz es *carpint-* siendo la parte de la palabra que le dota de significado.
+
+Los **morfemas que se añaden a la raíz** aportan significados que se agregan al principal modificándolo en parte. Por ejemplo, el morfema *-ero* puede indicar profesión u oficio como en carpint*ero* o zapat*ero*. Se pueden distinguir dos tipos:
+
+- los **morfemas derivativos** o **afijos**, que se añaden a la ráiz para formar otra palabra distinta.
+
+- los **morfemas flexivos** o **desinencias**, que dan lugar a distintas formas de una misma palabra. Indican género, persona, número, etc.
+
+Existen diversos tipos de procedimientos de formación de palabras. Uno de ellos es la **derivación** que consiste en añadir un afijo a la raíz de una palabra para formar otra nueva. Los **afijos** están categorizados en:
+
+- **prefijos**, aquellos que se anteponen a una palabra. Por ejemplo, poner y **re**poner, moral y **a**moral, hacer y **des**hacer.
+- **sufijos**, aquellos que se añaden detrás de la raíz o lexema. Por ejemplo, rico y riqu**eza**, fenómeno y fenomne**al**. Al añadir un sufijo a una raíz se producen cambios en el significado y, con frecuencia, en la categoría de la palabra original.
+- **interfijos**, aquellos que se añaden entre la base y un sufijo derivativo o entre la base y la flexión verbal. Por ejemplo, picar y pic**aj**oso, apretar y apret**uj**ar.
+
+Existen otro tipos de afijos llamados **circunfijos** constituido por dos segementos discontinuos, uno que precede y otro que sigue al lexema o base al que se junta [@Alcaraz1997]. Se puede considerar una combinación de prefijo y sufijo pero con contenido gramatical único. Por ejemplo, la palabra indonesia *kebisaan* (capacidad)
+ está formada por una base de carácter verbal, *bisa* (ser capaz) y un circunfijo, *ke-...-an* [@Alcaraz1997].
+
+Otro mecanismo para la creación de palabras es la **composición** que consiste en en unir dos o más raíces o palabras. Por ejemplo saca + corchos = **saca***corchos*, agrio + dulce = **agri***dulce*.
+
+La **inflexión**  es el proceso morfológico consistente en la modificación de palabras mediante morfemas flexivos, es decir, afijos con significados o valores gramaticales tales como *género*, *número*, *tiempo* y *persona*. A diferencia de la *derivación*, la inflexión está generalmente determinada por las relaciones sintácticas que se establecen entre las palabras. Por ejemplo, casa y casa**s*.
+
+
+Para que un ordenador pueda realizar la tarea de análisis morfológico adecuadamente son útiles los **transductores**.
+
+Un **transductor de estados finitos** se puede ver como un tipo de autómata finito que hace asociaciones entre dos conjuntos de símbolos. En particular, los **transductores secuenciales** son un tipo de transductores los cuales son deterministas en su entrada. Cabe recalcar que los transdcutores secuenciales lo son en su entrada (*input*) pero no tienen porqué serlo en su salida (*output*).
+
+En el caso de la **morfología de dos niveles**, una palabra se representa como una correspondencia entre dos niveles: 
+
+- **nivel léxico**: que representa la concatenación de los morfemas que componen una palabra.
+- **nivel de superficie**: que representa la concatenación de las letras que componen la ortografía de una palabra.
+
+El nivel de superficie podría verse como un nivel explícito, que viene dado por las letras que componen una palabra y el segundo nivel, el nivel léxico, es un nivel implícito y más abstracto. 
+
+Los transductoes secuenciales son aquellos autómatas que permiten relaciones ambos niveles, el nivel léxico y el de superficie.
+
+
+Las tareas de análisis morfológico se suele realizar a través de **transductores con léxicos** (conjunto de palabras) y **reglas**. No obstante, la necesidad de tener un léxico amplio para que estos algoritmos puedan funcionar hacen que se hayan desarrollado otros algoritmos que, aunque más simples y que pueden ser algo más inexactos, pueden ser más eficientes computacionalmente. Además, uno de los intereses en Information Retrieval (IR), es el de reducir las palabras a su raíz o lexema, tarea llamada **lematización** (*stemming* en inglés). Por ejemplo, si quisiésemos hacer una búsqueda en una serie de documentos de la palabra **biblioteca**, lo más probable es que también fuesen relevantes documentos en los que no apareciese la palabra **biblioteca** pero sí otras como **bibliotecas** o **bibliotecario**. La lematización reduciría todas esas palabras a su raíz **bibliotec** y permitiría hacer la búsqueda en los documentos.
+
+Uno de los algoritmos fundamentales en las tareas de lematización es el **algoritmo de Porter** [@Willett2006]. A grandes rasgos, el algoritmo de Porter consiste en alrededor de $60$ sufijos, dos reglas de recodificación y en una regla basada en el contexto para decidir si un sufijo ha de ser eliminado o no. El algoritmo utiliza una **distancia mínima** (*medida*) basda en el número de cadenas de *consontante-vocal-consonante* que quedan después de eliminar un sufijo. Como ejemplo, una regla típica es:
+
+$$
+(m>0)^*FULNESS\rightarrow ^*FUL
+$$
+
+cuyo significado es el de que el sufijo $^*FULNESS$ se reemplaza por el sufijo $^*FUL$ si y solo si la raíz resultante tiene medida no nula ($m$). Otras de las reglas es
+
+$$
+(m>0)^*FUL\rightarrow null
+$$
+
+El algoritmo tiene un carácter iterativo por lo que pueden aplicarse diversas reglas en cascada de forma que el resultado de una regla sirva como entrada para otra. Por ejemplo, mediante las dos reglas anteriores podríamos reducir la palabra inglesa $HOPEFULNESS$ como $HOPEFUL$  en la primera iteración y $HOPE$ en la segunda, llegando a su raíz o lexema.
+
+En total, hay cinco pasos en el algoritmo: el primero se encarga de de los afijos flexivos, los tres siguientes de los sufijos derivativos y un último paso, del registro final. 
+
+El propio Porter desarrolló **Snowball**, un procesador de caracteres basado en su algoritmo. En un principio, el algoritmo estaba orientado hacia el inglés, pero posteriormente se han hecho modificaciones para cubrir **lenguas romances** (español, portugués, italiano y francés), **germánicas** (holandés y alemán), **escandinavas** (danés, noruego y sueco) y también para el ruso y el finés. La página oficial de **Snowball** (http://snowballstem.org) y se encuentran todos los detalles. Por ejemplo, existe *PyStemmer*, una interfaz para Python.
+
+
+Cualquier área del conocimiento que involucre el desarrollo de modelos matemáticos para conocer la realidad, se necesitan unos datos sobre los que entrenar. En el área de la Inteligencia Artificial o del Machine Learning, hay varias estrategias para construir los modelos matemáticos a partir de unos datos dados. Una de ellas es la de dividir la muestra original en dos conjuntos: el conjunto de entrenamiento y el conjunto de test. En el procesamiento del lenguaje natural nuestros datos se tratan de corpus, es decir, un conjunto de textos para que los modelos matemáticos puedan aprender y para que también podamos hacernos una idea del comportamiento de los mismos.
+
+El **corpus de entrenamiento** es aquel subconjunto del corpus sobre el que se entrena el modelo, es decir, a partir de él se calculan los parámetros que rigen el modelo que, en el contexto de los modelos de N-gramas, por ejemplo, puede ser el N más adecuado, la mejor forma de *smoothing*, etcétera. No obstante, también necesitamos conocer cómo se corportará ese modelo en un entorno real. Es el papel que desempeña el **corpus de test**, otro subconjunto del corpus original distinto del corpus de entrenamiento. Si solo nos restringiésemos al corpus de entrenamiento tendríamos una información sesgada de cómo se desenvolvería en la realidad. Además, podríamos correr el riesgo de caer en el sobreajuste, es decir, tener un modelo excesivamente particularizado para el corpus de entrenamiento pero que no generaliza bien fuera de él. 
+
+De la mano de estos dos conceptos, tenemos el vocabulario abierto y el vocabulario cerrado. La hipótesis de vocabulario cerrado asume que **hay un léxico cerrado** y que todas las palabras que aparecen en el corpus de test están recogidas en este léxico.
+Sin embargo, dada la riqueza del lenguaje, es ingenuo pensar que todas las palabras que puedan aparecer en el corpus de test estarán recogidas en ese léxico cerrado. Por lo tanto, necesitamos también el concepto de **vocabulario abierto** y en el que se trata de modelar las palabras desconocidas en el corpus de test.
+
+Además del corpus de test, es necesario **definir alguna métrica** para conocer cómo de bien generaliza un modelo entrenado en el corpus de entrenamiento cuando se enfrenta al corpus de test y con la última aspiración de entender la capacidad de generalización del modelo en nuevos corpus que no estuviesen disponibles en el entrenamiento. La mejor manera es aplicar el modelo en el contexto real en el que se quiere implementar y medir su potencia en la tarea definida. Sin embargo, esta tarea no es siempre posible, ya sea por razones de coste computacional o por incapacida de definir una métrica objetiva.
+
+Para subsanar estos problemas, podemos recurrir a métricas que nos permitan medir la calidad del modelo independientemente de la aplicación (evaluación intríseca). Una métrica es la **perplejidad**.
+
+La intuición de perplejidad, según el libro base, se puede entender como *dados dos modelos probabilísticos, el mejor modelo será aquél que con un mejor ajuste al corpus de test o que mejor prediga los detalles del corpus de test*.
+
+La tarea de dividir el corpus existente en uno de entrenamiento y otro de test es importante para conseguir un buen modelo. Sin embargo, debemos tener en cuenta ciertas consideraciones. Por ejemplo, si obtenemos un corpus de entrenamiento grande, corremos el peligro de que la cantidad de información del corpus de test sea insuficiente y pueda suceder que sea un corpus poco representativo, es decir, que las métricas de error (*perplejidad*, etc) que podamos obtener de nuestro modelo no sean una aproximación certera del comportamiento real del modelo. 
+
+Por el contrario, un corpus de entrenamiento reducido y un corpus de test amplio tendría el efecto de que la capacidad de aprendizaje del modelo sea muy limitada y su comportamiento en un entorno real sea muy malo porque, al tener un volumen de entranimiento escaso, podría no haber suficiente variabilidad en las estructuras como para aspirar a una generalidad.
+
+Por poner un ejemplo de los dos paradigmas. Imaginemos que queremos obtener un modelo de propósito general y que tenemos disponible un corpus con textos de diversas temáticas, uno de los textos perteneciente a artículos deportivos. En el caso de escoger un corpus de entrenamiento pequeño, podríamos tener solamente un texto de artículos deportivos y el aprendizaje que el modelo haría estaría muy limitado a corpus del mismo tema y, en cuanto se aplicase el modelo entrenado en el corpus general, los resultados serían probablemente muy pobres. En el otro extremo, el corpus de test estaría formado exclusivamente por el texto deportivo por lo que las métricas obtenidas del ajuste del modelo serían inservible para poder reconocer su generalidad en otro tipo de textos.
+
+
 
 # 1. Describir la relación existente entre las expresiones regulares y los autómatas finitos. A modo de ejemplo, ilustrarlo con alguna de la relacionadas con la práctica y su autómata correspondiente.
 
@@ -20,6 +147,10 @@ En el procesamiento del lenguaje natural trabajamos con palabaras o, lo que es l
 Una **expresión regular** es una notación algebraica que permite caracterizar un conjunto de cadenas de caracteres. Dicho de otro modo, mediante una concatenación de símbolos, seremos capaces de encontrar cadenas de caracteres que sigan un patrón o estructura determinada. Podría denominarse como un *metalenguaje*. 
 
 Pero estas notaciones algebraicas no tienen ninguna utilidad en sí mismas, necesitamos que un ordenador sea capaz de entenderlas para llevarlas a la práctica. Es aquí donde entran en juego los **autómatas finitos**, que pueden verse como una implementación de las expresiones regulares. De hecho, cualquier expresión regular puede ser implementada como un autómata finito y viceversa, cualquier autómata finito puede ser descrito con una expresión regular.
+
+Para cualquier modelo basado en **N-gramas** se necesitará una estimación de la máxima verosimilitud (EMV) obtenida del conjunto de entrenamiento. Estas estimaciones podrán ser precisas para un *N-grama* en el caso de que tenga un número suficiente de casos en el conjunto de entrenamiento. Sin embargo, el conjunto de datos en el que nos basamos para estimar estas probabilidades **es finito** y por tanto puede que secuencias de palabras perfectamente válidas no tengan ninguna ocurrencia lo que nos llevaría a tener **N-gramas con probabilidad 0** pero que no debería ser así. Además, nos enfrentamos al problema de que no solo podemos tener *N-gramas* con ninguna ocurrencia, sino que la estimación de máxima verosimilitud también será imprecisa en el caso en el que haya pocas ocurrencias de un determinado *N-grama*.
+
+Por ejemplo, supongamos que nuestro corpus se compone de textos extraídos de libros de filosofía. N-gramas como *"teoría de la justicia"* o *"la libertad de pensamiento"* serán relativamente comunes y, por tanto, tendremos disponibles suficientes casos como para poder calcular la estimación de máxima verosimilitud. Sin embargo, seguramente no encontraremos ningún N-grama como *"el Real Madrid perdió"* y, por tanto, su estimación por máxima verosimilitud será 0. ¿Quiere decir esto que no podamos encontrar ese **4-grama**? Desde luego que no. Ese es precisamente el problema que se intenta subsanar, tratar de modificar la EMV centrándonos en aquellos *N-gramas* que hemos asumido incorrectamente que tendrían probabilidad 0. 
 
 **EJEMPLO DE LA PRÁCTICA**.
 
@@ -93,6 +224,28 @@ El nivel de superficie podría verse como un nivel explícito, que viene dado po
 
 # 5. Describir en qué consiste la intersección, proyección y composición de transductores y qué fenómenos lingüísticos pueden tratarse con esta aproximación.
 
+# 6. Explicar qué herramientas emplearía y cómo para implementar el algoritmo de Porter.
+
+En procesamiento del lenguaje natural para llevar a cabo tareas de análisis morfológico se suele realizar a través de transductores con léxicos y reglas. No obstante, la necesidad de tener un léxico amplio de estos algoritmos hacen que existan algoritmos que, aunque más simples y que pueden ser algo más inexactos, pueden ser más eficientes computacionalmente. Además, uno de los intereses en Information Retrieval (IR), es el de reducir las palabras a su raíz o lexema, tarea llamada **lematización** (*stemming* en inglés). Por ejemplo, si quisiésemos hacer una búsqueda en una serie de documentos de la palabra **biblioteca**, lo más probable es que también fuesen relevantes documentos en los que no apareciese la palabra **biblioteca pero sí otras como **bibliotecas** o **bibliotecario**. La lematización reduciría todas esas palabras a su raíz **bibliotec** y permitiría hacer la búsqueda en los documentos.
+
+Uno de los algoritmos fundamentales en las tareas de lematización es el **algoritmo de Porter** [@Willett2006]. A grandes rasgos, el algoritmo de Porter consiste en alrededor de $60$ sufijos, dos reglas de recodificación y en una regla basada en el contexto para decidir si un sufijo ha de ser eliminado o no. El algoritmo utiliza una **distancia mínima** (*medida*) basda en el número de cadenas de consontante-vocal-consonante que quedan después de eliminar un sufijo. Como ejemplo, una regla típica es:
+
+$$
+(m>0)^*FULNESS\rightarrow ^*FUL
+$$
+
+cuyo significado es el de que el sufijo $^*FULNESS$ se reemplaza por el sufijo $^*FUL$ si y solo si la raíz resultante tiene medida no nula ($m$). Otras de las reglas es
+
+$$
+(m>0)^*FUL\rightarrow null
+$$
+
+El algoritmo tiene un carácter iterativo por lo que pueden aplicarse diversas reglas en cascada de forma que el resultado de una regla sirva como entrada para otra. Por ejemplo, mediante las dos reglas anteriores podríamos reducir la palabra inglesa $HOPEFULNESS$ como $HOPEFUL$  en la primera iteración y $HOPE$ en la segunda.
+
+En total, hay cinco pasos en el algoritmo: el primero se encarga de de los afijos flexivos, los tres siguientes de los sufijos derivativos y hay un último paso de registro. 
+
+El propio Porter desarrolló **Snowball** un procesador de caracteres basado en su algoritmo. En un principio, el algoritmo estaba orientado hacia el inglés, pero posteriormente se han hecho modificaciones para cubrir **lenguas romances** (español, portugués, italiano y francés), **germánicas** (holandés y alemán) y **escandinavas** (danés, noruego y sueco) y también para el ruso y el finés. La página oficial de **Snowball** es http://snowballstem.org y se encuentran todos los detalles. Por ejemplo, existe *PyStemmer*, una interfaz para Python.
+
 # 7. Describir la relación que existe entre los conceptos **corpus de entrenamiento** (*training set*), **corpus de test** (*test set*), **vocabulario abierto**, **vocabulario cerrado** y **perplejidad**.
 
 Cualquier área del conocimiento que involucre el desarrollo de modelos matemáticos para conocer la realidad, se necesita entrenar sobre unos datos empíricos. En el área de la Inteligencia Artificial o del Machine Learning, hay varias estrategias para construir los modelos matemáticos a partir de unos datos. Una de ellas es dividir la muestra original en dos conjuntos: el conjunto de entrenamiento y el conjunto de test. En el procesamiento del lenguaje natural no es una excepción. Determinar la construcción del modelo, por ejemplo, un modelo de N-gramas, 
@@ -109,6 +262,11 @@ La intuición de la métrica de perplejidad, según el libro base, se puede ente
 
 # 8. ¿Qué ocurre si tenemos un corpus de entrenamiento grande y un corpus de test pequeño y viceversa?
 
+La tarea de dividir el corpus existente en uno de entrenamiento y otro de test es importante para conseguir un buen modelo. 
+
+Si obtenemos un corpus de entrenamiento grande, corremos el peligro de que la cantidad de información del corpus de test sea poca y pueda suceder que sea un corpus poco representativo, es decir, que las métricas de error (*perplejidad*, etc) que podamos obtener de nuestro modelo no sean lo suficientemente generalizables y no nos permitan determinar el comportamiento real del modelo. 
+
+Por el contrario, un corpus de entrenamiento reducido y un corpus de test amplio tendría el efecto de que la capacidad de aprndizaje del modelo sea muy limitada y su comportamiento en un entorno real sea muy malo.
 
 # 9. Describir qué problema se pretende resolver mediante las técnicas de *smooothing*.
 
@@ -120,7 +278,7 @@ Por ejemplo, supongamos que nuestro corpus se compone de textos extraídos de li
 
 Una de las tareas del procesamiento del lenguaje natural es la de saber a qué **categoría gramatical** pertenece cada una de las palabras que están presentes en una frase o texto (*Part-of-Speech Tagging* en inglés). Esta tarea nos ayudará a desarrollar con éxito otras como la del reconocimiento del habla. 
 
-No se trata de una tarea sencilla ya que la riqueza del lenguaje hace que haya que enfrentarse a palabras con la misma grafía pero que pueden pertenecer a categorías gramaticales distintas en una oración lo que se conoce como **ambigüedad gramatical**.
+No se trata de una tarea sencilla ya que la riqueza del lenguaje hace que haya que enfrentarse a palabras con la misma grafía pero que pueden pertenecer a categorías gramaticales distintas en una oración, lo que se conoce como **ambigüedad gramatical**.
 
 En caso de ambigüedad, la categoría gramatical puede depender de factores como las palabras precedentes o el contexto en el que se desarrolla la oración. La palabra **haya** es un ejemplo de ambigüedad gramatical:
 
