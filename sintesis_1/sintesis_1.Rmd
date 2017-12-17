@@ -49,7 +49,32 @@ En la teoría de autómatas, una máquina de estados finitos se considera un aut
 - cada una de sus transiciones está determinada unívocamente por su estado de entrada y su símbolo de entrada
 - 
 
+# 3.Describir para el inglés y el castellano los elementos de la morfología: ejemplos de morfemas, prefijos, sufijos, infijos, circunfijos, derivación, inflexión, concordancia y enclíticos. Utilizar los recursos recomendados (lematizador de la U. de las Palmas y MACO)
 
+Una tarea imporante en el procesamiento del lenguaje natural es el **análisis morfológico** (*morphological parsing*, en inglés) o **morfología**. Según la **Real Academia de la lengua Española (RAE)**, la **morfología** es la parte de la gramática que **estudia la estructura de las palabras y de sus elementos constitutivos**. Las **palabras** son unidades de la lengua dotadas de significado y están constituidas por una o varias unidades menores, también con significado, llamados morfemas.
+
+En clastellano existen dos tipos distintos de morfemas: los **morfemas léxicos o lexemas** y los **morfemas** que se añaden a ese lexema. En inglés se denominan *stems* y *affixes*, respectivamente.
+
+El **morfema léxico o lexema** es el morfema que aporta significado básico a la palabara. Por ejemplo: en *carpintero*, la raíz es *carpint-*. 
+
+Los **morfemas yqe se añaden a la raíz** aportan significados que se agregan al principal modificándolo en parte. Se pueden distinguir dos tipos:
+
+- los **morfemas derivativos** o **afijos**, que se añaden a la ráiz para formar otra palabra distinta.
+
+- los **morfemas flexivos** o **desinencias**, que dan lugar a distintas formas de una misma palabra. Indican género, persona, número, etc.
+
+Existen diversos tipos de procedimientos de formación de palabras. Uno de ellos es la **derivación** que consiste en añadir un afijo a la raíz de una palabra para formar otra nueva. Los **afijos** están categorizados en:
+
+- **prefijos**, aquellos que se anteponen a una palabra. Por ejemplo, poner y **re**poner, moral y **a**moral, hacer y **des**hacer.
+- **sufijos**, aquellos que se añaden detrás de la raíz o lexema. Por ejemplo, rico y riqu**eza**, fenómeno y fenomne**al**. Al añadie un sufijo a una raíz se producen cambios en el significado y, con frecuencia, en la categoría de la palabra original.
+- **interfijos**, aquellos que se añaden entre la base y un sufijo derivativo o entre la base y la flexión verbal. Por ejemplo, picar y pic**aj**oso, apretar y apret**uj**ar.
+
+Existen otro tipos de afijos llamados **circunfijos** constituido por dos segementos discontinuos, uno que precede y otro que sigue al lexema o base al que se junta [@Alcaraz1997]. Se puede considerar una combinación de prefijo y sufijo pero con contenido gramatical único. Por ejemplo, la palabra indonesia *kebisaan* (capacidad)
+ está formada por una base de carácter verbal, *bisa* (ser capaz) y un circunfijo, *ke-...-an* [@Alcaraz1997].
+
+Otro mecanismo para la creación de palabras es la **composición** que consiste en en unir dos o más raíces o palabras. Por ejemplo saca + corchos = **saca***corchos*, agrio + dulce = **agri***dulce*.
+
+La **inflexión**  es el proceso morfológico consistente en la modificación de palabras mediante morfemas flexivos, es decir, afijos con significados o valores gramaticales tales como *género*, *número*, *tiempo* y *persona*. A diferencia de la *derivación*, la inflexión está generalmente determinada por las relaciones sintácticas que se establecen entre las palabras. Por ejemplo, casa y casa**s*.
 
 
 
@@ -66,7 +91,7 @@ Una tarea imporante en el procesamiento del lenguaje natural es el **análisis m
 
 El nivel de superficie podría verse como un nivel explícito, que viene dado por las letras que componen una palabra y el segundo nivel, el nivel léxico, es un nivel implícito y más abstracto. 
 
-
+# 5. Describir en qué consiste la intersección, proyección y composición de transductores y qué fenómenos lingüísticos pueden tratarse con esta aproximación.
 
 # 7. Describir la relación que existe entre los conceptos **corpus de entrenamiento** (*training set*), **corpus de test** (*test set*), **vocabulario abierto**, **vocabulario cerrado** y **perplejidad**.
 
