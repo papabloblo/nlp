@@ -1,0 +1,37 @@
+---
+title: "Síntesis 2"
+author: "Pablo Hidalgo García"
+output: html_notebook
+---
+
+El procesamiento del lenguaje natural (NLP por sus siglas en inglés) lleva asociado distintos niveles de abstracción. En un primer nivel, se pueden tratar a las palabras como entidades individuales y asociarles, por ejemplo, la categoría gramatical a la que pueden pertenecer (nombre, pronombre, etcétera) describiendo la función que desempeñan dentro de la oración (*Part-of-Speech tagging* o POS).
+
+Sin embargo, en un nivel superior, podemos decir que las frases no se tratan simplemente de concatenaciones de esas entidades individuales -palabras- sino que existen relaciones entre ellas y hay que desarrollar métodos que nos permitan identificar estas relaciones para captar la estructura del lenguaje. 
+
+Un concepto importante es el de **constituyente sintáctico** que se trata de una palabra o un grupo de palabras que se comportan como una unidad dentro de la oración. Por ejemplo, en la frase
+
+> La obra de teatro fue un éxito absoluto
+
+el grupo de palabras *La obra de teatro* conforma un constituyente porque puede verse como una unidad dentro de la oración ya que no tendría sentido fragmentar esa unidad y eliminar alguna de las palabras que componen el constituyente:
+
+> *De* fue un éxito absoluto (\*)
+
+No solo es importante el concepto de constituyente por la indivisibilidad que presenta como unidad, sino porque suele desempeñar alguna función dentro de la oración y nos permite averiguar las relaciones entre constituyentes y establecer una posible jerarquía en la oración. 
+
+Existen algunas pruebas que podemos hacerles a grupos de palabras para conocer si se tratan de un constituyente. Por ejemplo, utilizando de nuevo la oración **La obra de teatro fue un éxito absoluto**: 
+
+- podemos sustituir *La obra de teatro* por *El espectáculo* sin que esto altere la jerarquía sintáctica de la oración.
+- podemos realizar una pregunta que obtenga como respuesta el constituyente:
+  - ¿*Qué* fue un éxito absoluto?
+  - *La obra de teatro*.
+  
+Existen otro tipo de pruebas pero no constituyen un método unívoco que nos permita determinar los diversos constituyentes.
+
+La forma más común de representar formalmente y de forma matemática la estructura que presentan los constituyentes en la oración es la **gramática libre de contexto** (*Context-Free Grammar* o CFG).
+
+Una gramática libre de contexto consiste en un conjunto de reglas que definen cómo se agrupan y ordenan los símbolos del lenguaje y proveen de un léxico de palabras y símbolos. 
+  
+
+
+
+
