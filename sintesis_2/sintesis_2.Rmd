@@ -1,7 +1,9 @@
 ---
 title: "Síntesis 2"
 author: "Pablo Hidalgo García"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 El procesamiento del lenguaje natural (NLP por sus siglas en inglés) lleva asociado distintos niveles de abstracción. En un primer nivel, se pueden tratar a las palabras como entidades individuales y asociarles, por ejemplo, la categoría gramatical a la que pueden pertenecer (nombre, pronombre, etcétera) describiendo la función que desempeñan dentro de la oración (*Part-of-Speech tagging* o POS).
@@ -16,7 +18,7 @@ el grupo de palabras *La obra de teatro* conforma un constituyente porque puede 
 
 > *De* fue un éxito absoluto (\*)
 
-No solo es importante el concepto de constituyente por la indivisibilidad que presenta como unidad, sino porque suele desempeñar alguna función dentro de la oración y nos permite averiguar las relaciones entre constituyentes y establecer una posible jerarquía en la oración. 
+No solo es importante el concepto de constituyente por la indivisibilidad que presenta como unidad, sino porque suele desempeñar alguna función dentro de la oración y nos permite averiguar las relaciones entre constituyentes y establecer una posible jerarquía en la oración (los constituyentes, a su vez, pueden estar formados por varios constituyentes). 
 
 Existen algunas pruebas que podemos hacerles a grupos de palabras para conocer si se tratan de un constituyente. Por ejemplo, utilizando de nuevo la oración **La obra de teatro fue un éxito absoluto**: 
 
@@ -24,6 +26,7 @@ Existen algunas pruebas que podemos hacerles a grupos de palabras para conocer s
 - podemos realizar una pregunta que obtenga como respuesta el constituyente:
   - ¿*Qué* fue un éxito absoluto?
   - *La obra de teatro*.
+- la indivisibilidad mostrada al sustituir *La obra de teatro* por *De*.
   
 Existen otro tipo de pruebas pero no constituyen un método unívoco que nos permita determinar los diversos constituyentes.
 
@@ -31,7 +34,18 @@ La forma más común de representar formalmente y de forma matemática la estruc
 
 Una gramática libre de contexto consiste en un conjunto de reglas que definen cómo se agrupan y ordenan los símbolos del lenguaje y proveen de un léxico de palabras y símbolos. 
   
+# Análisis sintáctico
 
+En la sección anterior hemos establecido que toda frase debe estar sujeta a una estructura sintáctica que relacione los distintos constituyentes y hemos definido formalmente cómo debería ser esta estructura. Una vez definido este marco teórico necesitamos definir estrategias que nos permitan conocer la estructura de una frase (realizar su análisis sintáctico) conforme a las reglas establecidas. 
 
+Este etiquetado o análisis sintáctico será útil en aplicaciones como la detección de errores gramaticales en frases que no pueden ser analizadas conforme a las reglas definidas o en sistemas para contestar preguntas o extracción de la información.
 
+## Etiquetado como búsqueda
 
+Una vez que se hayan definido el conjunto de reglas que definen una gramática debemos buscar entre el espacio posible de árboles de etiquetado (*pase tree*) aquél que sea consistente con el conjunto de palabras que estemos tratando. 
+
+Hay dos estrategias para realizar esta búsqueda en la que se engloban los distintos algoritmos: **de arriba hacia abajo** (*top-down*) y **de abajo hacia arriba**  (*bottom-up*)
+
+### Estrategia de arriba hacia abajo (*top-down*)
+
+Este tipo de etiquetadores comienzan con un nodo raíz inicial y construyen la estructura a partir de él hasta llegar al último nivel (siguiendo la metáfora del árbol, las hojas) que estaría constituido por las diferentes palabras.
