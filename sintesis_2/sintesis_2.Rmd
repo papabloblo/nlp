@@ -38,14 +38,49 @@ Una gramática libre de contexto consiste en un conjunto de reglas que definen c
 
 En la sección anterior hemos establecido que toda frase debe estar sujeta a una estructura sintáctica que relacione los distintos constituyentes y hemos definido formalmente cómo debería ser esta estructura. Una vez definido este marco teórico necesitamos definir estrategias que nos permitan conocer la estructura de una frase (realizar su análisis sintáctico) conforme a las reglas establecidas. 
 
-Este etiquetado o análisis sintáctico será útil en aplicaciones como la detección de errores gramaticales en frases que no pueden ser analizadas conforme a las reglas definidas o en sistemas para contestar preguntas o extracción de la información.
+Este etiquetado o análisis sintáctico será útil en aplicaciones como la detección de errores gramaticales o en sistemas para contestar preguntas o extracción de la información.
 
 ## Etiquetado como búsqueda
 
-Una vez que se hayan definido el conjunto de reglas que definen una gramática debemos buscar entre el espacio posible de árboles de etiquetado (*pase tree*) aquél que sea consistente con el conjunto de palabras que estemos tratando. 
+Una vez que se hayan definido el conjunto de reglas que definen una gramática debemos buscar entre el espacio posible de árboles de etiquetado (*parse tree*) aquél que sea consistente con el conjunto de palabras que estemos tratando. Es decir, nos estamos enfrentando a un problema de búsqueda ya que el espacio de árboles posibles puede ser enorme.
 
 Hay dos estrategias para realizar esta búsqueda en la que se engloban los distintos algoritmos: **de arriba hacia abajo** (*top-down*) y **de abajo hacia arriba**  (*bottom-up*)
 
 ### Estrategia de arriba hacia abajo (*top-down*)
 
-Este tipo de etiquetadores comienzan con un nodo raíz inicial y construyen la estructura a partir de él hasta llegar al último nivel (siguiendo la metáfora del árbol, las hojas) que estaría constituido por las diferentes palabras.
+Este tipo de etiquetadores comienzan con un nodo raíz inicial y construyen la estructura a partir de él hasta llegar al último nivel (siguiendo la metáfora del árbol, las hojas) que estaría constituido por las diferentes palabras. Los pasos a seguir serían:
+
+1. Se comienza asumiendo el símbolo inicial $S$ (capa inicial).
+2. La siguiente capa se construye con aquellas reglas gramaticales en las que aparezca el símbolo $S$ en la parte izquierda.
+3. Se repite el paso anterior hasta que se llega al nivel de categorías gramaticales (*POS*).
+4. Aquellos árboles que no son capaces de representar las palabras a etiquetar, son eliminados.
+
+### Estrategia de abajo hacia arriba (*top-down*)
+
+Esta estrategia, como cabe suponer, se lleva a cabo de forma inversa que la anterior. Comienza creando la estructura en árbol a partir de las palabras a etiquetar y va conformando el árbol hasta llegar al nodo raíz representado por el símbolo $S$.
+
+1. Se comienza bucando cada palabra en un léxico en el que aparezca la categoría gramatical a la que pertenece. En el caso de ambigüedad, la estrategia debe tener en cuenta las distintas posibilidades.
+2. La siguiente capa se construye con aquellas reglas gramaticales en las que aparezca la etiqueta en la parte derecha.
+3. Se repite el paso anterior hasta que se llega al nivel del nodo raíz $S$.
+
+## Ambigüedad
+
+La lengua es rica en muchos sentidos y eso hace que su procesamiento sea difícil. Uno de los retos es la ambigüedad.
+
+Existen diversas formas de ambigüedad, como la ambigüedad gramatical en la que una palabra con una misma grafía puede pertenecer a categorías gramaticales distintas. Otro tipo de ambigüedad es la **ambigüedad estructural** que consiste en que una misma frase puede analizarse sintácticamente de forma no unívoca. Dos formas comunes de ambigüedad son *attachment ambiguity* y *coordination ambiguity*.
+
+La *attachment ambiguity* consiste en una frase en la que al menos un constituyente puede ser etiquetado sintácticamente de dos o más formas. Por ejemplo, la frase 
+
+> Se venden zapatos de piel de señora
+
+se podría estructurar de dos formas distintas:
+
+1. ...*[zapatos [de piel] [de señora]]]*
+2. ...*[zapatos [de piel [de señora]]]*
+
+Aunque el segundo análisis es poco probable que se dé en la realidad, es un análisis completamente válido desde el punto de vista de las reglas del análisis sintáctico.
+
+La *coordination ambiguity* se da cuando diferentes partes de una frase se unen por una conjunción como *y* que no queda clara cuál es la concatenación. Por ejemplo, en la frase
+
+> 
+
